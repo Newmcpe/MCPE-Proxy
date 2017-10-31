@@ -17,6 +17,7 @@ class FlyPlugin extends ProxyPluginBase
     public function onDataPacketFromServer(DataPacket $packet): bool
     {
         if ($packet instanceof AdventureSettingsPacket) {
+            echo "AdventureSettingsPacket listened";
             $send = new AdventureSettingsPacket;
             $send->flags = 615;
             $send->commandPermission = 0;
