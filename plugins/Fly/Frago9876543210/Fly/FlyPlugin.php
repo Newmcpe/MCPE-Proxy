@@ -18,14 +18,15 @@ class FlyPlugin extends ProxyPluginBase
     {
         if ($packet instanceof AdventureSettingsPacket) {
             echo "AdventureSettingsPacket listened";
-            $send = new AdventureSettingsPacket;
-            $send->flags = 615;
-            $send->commandPermission = 0;
-            $send->flags2 = 31;
-            $send->playerPermission = 1;
-            $send->customFlags = 0;
-            $send->entityUniqueId = $packet->entityUniqueId;
-            $this->getProxy()->writeDataPacket($send, $this->getProxy()->clientHost, $this->getProxy()->clientPort);
+           		$pk = new AdventureSettingsPacket();
+		$pk->setFlag(AdventureSettingsPacket::WORLD_IMMUTABLE, false);
+		$pk->setFlag(AdventureSettingsPacket::NO_PVP, false);
+		$pk->setFlag(AdventureSettingsPacket::AUTO_JUMP, false);
+		$pk->setFlag(AdventureSettingsPacket::ALLOW_FLIGHT, true);
+		$pk->setFlag(AdventureSettingsPacket::NO_CLIP, false);
+		$pk->setFlag(AdventureSettingsPacket::FLYING, true);
+		$pk->entityUniqueId = $packet->entityUniqueId;
+            $this->getProxy()->writeDataPacket($pk, $this->getProxy()->clientHost, $this->getProxy()->clientPort);
         }
         return true;
     }
