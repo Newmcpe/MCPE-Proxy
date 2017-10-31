@@ -7,6 +7,7 @@ namespace proxy;
 
 use pocketmine\network\mcpe\protocol\BatchPacket;
 use pocketmine\network\mcpe\protocol\DataPacket;
+use pocketmine\network\mcpe\protocol\I;
 use pocketmine\network\mcpe\protocol\PacketPool;
 use pocketmine\network\mcpe\protocol\UpdateAttributesPacket;
 use pocketmine\utils\TextFormat;
@@ -205,10 +206,15 @@ class Proxy
                                     $stole = PacketPool::getPacketById(ord($buf{0}));
                                     //Now there are a lot of forks, then some packages can be decrypted wrongly and this will cause an error.
                                     //Here you can disable some packages if they cause an errors
-                                    if (!$stole instanceof UpdateAttributesPacket) {
-                                        $stole->buffer = $buf;
-                                        $stole->decode();
-                                        return $stole;
+                                   $disabled = [ 
+                                       I::AVAILABLE_COMMANDS_PACKET, 
+                                       I::UPDATE_ATTRIBUTES_PACKET 
+                                   ]; 
+                                    if (!in_array($stole::NETWORK_ID, $disabled)) { 
+                                        $stole->buffer = $buf; 
+                                        $stole->decode(); 
+
+                                       return $stole; 
                                     }
                                 }
                             }
